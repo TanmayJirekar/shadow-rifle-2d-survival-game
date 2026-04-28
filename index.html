@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Shadow Rifle: 2D Survival Ops</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="game-root">
+
+    <!-- HOME SCREEN -->
+    <div id="screen-home" class="screen active">
+      <div class="home-overlay"></div>
+      <div class="home-content">
+        <div class="title-section">
+          <div class="title-badge">TACTICAL SHOOTER</div>
+          <h1 class="game-title">SHADOW<br>RIFLE</h1>
+          <p class="game-sub">2D SURVIVAL OPS</p>
+        </div>
+        <div class="home-btns">
+          <button id="btn-start" class="btn-main">▶ START MISSION</button>
+          <button id="btn-continue" class="btn-main btn-continue hidden">⚡ CONTINUE — LVL <span
+              id="continue-lvl">1</span></button>
+          <button id="btn-dashboard" class="btn-sec">📊 COMMAND CENTER</button>
+          <button id="btn-shop" class="btn-sec">🛒 ARMORY</button>
+        </div>
+        <div class="home-footer">
+          <span>💰 <span id="home-coins">0</span></span>
+          <span>☠ <span id="home-kills">0</span> KILLS</span>
+          <span>LVL <span id="home-level">1</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="screen-game" class="screen hidden">
+      <div id="hud">
+        <div id="hud-left">
+          <div class="hud-row">
+            <span class="hud-lbl">HP</span>
+            <div class="hp-bar-bg">
+              <div id="hp-bar" class="hp-bar-fill"></div>
+            </div>
+            <span id="hud-hp">100</span>
+          </div>
+          <div class="hud-row">
+            <span class="hud-lbl">AMMO</span>
+            <span id="hud-ammo">30/30</span>
+            <span id="hud-reload" class="reload-txt hidden">↺ RELOADING</span>
+          </div>
+        </div>
+        <div id="hud-center">
+          <div class="hud-level">LEVEL <span id="hud-level">1</span></div>
+          <div class="hud-wave">WAVE <span id="hud-wave">1</span>/<span id="hud-waves">3</span></div>
+        </div>
+        <div id="hud-right">
+          <div class="hud-coin-row">💰 <span id="hud-coins">0</span></div>
+          <div class="hud-wpn" id="hud-wpn">RIFLE</div>
+          <button id="btn-pause" class="pause-btn">⏸</button>
+        </div>
+      </div>
+
+      <div id="canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+        <div id="mobile-controls">
+          <div id="mc-left">
+            <button class="mc-btn" id="mc-left-btn">◀</button>
+            <button class="mc-btn" id="mc-right-btn">▶</button>
+          </div>
+          <div id="mc-right">
+            <button class="mc-btn" id="mc-jump-btn">▲ JUMP</button>
+            <button class="mc-btn mc-fire" id="mc-fire-btn">🔫 FIRE</button>
+            <button class="mc-btn" id="mc-reload-btn">↺ RELOAD</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="pause-overlay" class="game-overlay hidden">
+        <div class="overlay-box">
+          <h2>⏸ PAUSED</h2>
+          <button id="btn-resume" class="btn-main">▶ RESUME</button>
+          <button id="btn-quit-game" class="btn-sec">🏠 MAIN MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD SCREEN -->
+    <div id="screen-dashboard" class="screen hidden">
+      <div class="screen-nav">
+        <button class="btn-back" id="dash-back">← BACK</button>
+        <h2 class="screen-title">COMMAND CENTER</h2>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="card-hdr">🪖 PROFILE</div>
+          <div class="avatar">🪖</div>
+          <div class="name-row">
+            <input id="username-input" class="name-input" type="text" placeholder="Enter callsign..." maxlength="16">
+            <button id="btn-save-name" class="btn-sm">SAVE</button>
+          </div>
+          <div class="info-list">
+            <div class="info-row"><span>RANK</span><span id="d-rank">PRIVATE</span></div>
+            <div class="info-row"><span>COINS</span><span id="d-coins">0</span></div>
+            <div class="info-row"><span>LEVEL</span><span id="d-level">1</span></div>
+            <div class="info-row"><span>WEAPON</span><span id="d-weapon">Rifle</span></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="card-hdr">📊 COMBAT STATS</div>
+          <div class="stats-list">
+            <div class="stat-row"><span>Total Kills</span><span id="d-kills">0</span></div>
+            <div class="stat-row"><span>Levels Done</span><span id="d-levels">0</span></div>
+            <div class="stat-row"><span>High Score</span><span id="d-score">0</span></div>
+            <div class="stat-row"><span>Coins Earned</span><span id="d-total-coins">0</span></div>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="card-hdr">🎒 INVENTORY</div>
+          <div id="inv-list" class="inv-list"></div>
+        </div>
+        <div class="dash-card">
+          <div class="card-hdr">🎁 DAILY REWARD</div>
+          <div class="daily-wrap">
+            <div class="daily-icon">🎁</div>
+            <p id="daily-text">Claim your daily bonus!</p>
+            <button id="btn-daily" class="btn-main">CLAIM 50 COINS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHOP SCREEN -->
+    <div id="screen-shop" class="screen hidden">
+      <div class="screen-nav">
+        <button class="btn-back" id="shop-back">← BACK</button>
+        <h2 class="screen-title">ARMORY SHOP</h2>
+        <div class="shop-balance">💰 <span id="shop-coins">0</span></div>
+      </div>
+      <div id="shop-grid" class="shop-grid"></div>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div id="screen-gameover" class="screen hidden">
+      <div class="result-wrap">
+        <div class="result-icon">💀</div>
+        <h2 class="result-title">MISSION FAILED</h2>
+        <div class="result-stats">
+          <div class="stat-row"><span>SCORE</span><span id="go-score">0</span></div>
+          <div class="stat-row"><span>KILLS</span><span id="go-kills">0</span></div>
+          <div class="stat-row"><span>COINS EARNED</span><span id="go-coins">0</span></div>
+          <div class="stat-row"><span>LEVEL</span><span id="go-level">1</span></div>
+        </div>
+        <div class="result-btns">
+          <button id="btn-retry" class="btn-main">↩ RETRY</button>
+          <button id="btn-menu-go" class="btn-sec">🏠 MENU</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VICTORY SCREEN -->
+    <div id="screen-victory" class="screen hidden">
+      <div class="result-wrap victory-wrap">
+        <div class="result-icon">🏆</div>
+        <h2 class="result-title victory-title">MISSION COMPLETE!</h2>
+        <div class="result-stats">
+          <div class="stat-row"><span>SCORE</span><span id="v-score">0</span></div>
+          <div class="stat-row"><span>KILLS</span><span id="v-kills">0</span></div>
+          <div class="stat-row reward-row"><span>REWARD</span><span id="v-reward">+50 💰</span></div>
+        </div>
+        <div class="result-btns">
+          <button id="btn-next-lvl" class="btn-main">⚡ NEXT LEVEL</button>
+          <button id="btn-menu-v" class="btn-sec">🏠 MENU</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script type="module" src="main.js"></script>
+</body>
+
+</html>
